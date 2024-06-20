@@ -1,0 +1,14 @@
+{
+  "name": "progetto-typescript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "Roberta Ciresa",
+  "license": "ISC",
+  "description": "progetto di mobilità condivisa per Start2Imact, sviluppo in solo typescript"
+}
