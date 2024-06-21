@@ -1,34 +1,41 @@
+// Definizione dei type per IMezzo
+type tipo = 'bici' | 'scooter' | 'monopattino'; 
+type stato = 'disponibile' | 'in uso';
+
 // Definizione dell'interfaccia IMezzo
 interface IMezzo {
-    tipo: 'bici' | 'scooter' | 'monopattino';
+    tipo: tipo;
     id: string;
-    stato: 'disponibile' | 'in uso';
+    stato: stato;
     assegnaUtente(utente: IUtente): void;
 }
+
+// Definizione dei type per IUtente
+type metodoPagamento = 'carta' | 'bancomat' | 'app';
 
 // Definizione dell'interfaccia IUtente
 interface IUtente {
     nome: string;
     cognome: string;
     email: string;
-    metodoPagamento: 'carta' | 'bancomat' | 'app';
+    metodoPagamento: metodoPagamento;
     prenotaMezzo(mezzo: IMezzo): void;
 }
 
 // Definizione dell'interfaccia ICitta
 interface ICitta {
     nome: string;
-    mezziDisponibili: IMezzo[];
+    mezziPresenti: IMezzo[];
     aggiungiMezzo(mezzo: IMezzo): void;
 }
 
 // Implementazione della classe Mezzo che segue l'interfaccia IMezzo
 class Mezzo implements IMezzo {
-    tipo: 'bici' | 'scooter' | 'monopattino';
+    tipo: tipo;
     id: string;
-    stato: 'disponibile' | 'in uso';
+    stato: stato;
 
-    constructor(tipo: 'bici' | 'scooter' | 'monopattino', id: string) {
+    constructor(tipo: tipo, id: string) {
         this.tipo = tipo;
         this.id = id;
         this.stato = 'disponibile';
@@ -39,7 +46,7 @@ class Mezzo implements IMezzo {
             this.stato = 'in uso';
             console.log(`${this.tipo} con ID ${this.id} è stato assegnato a ${utente.nome} ${utente.cognome}`);
         } else {
-            console.log(`${this.tipo} con ID ${this.id} non è disponibile.`);
+            console.log(`Errore, impossibile assegnare ${this.id}. Questo mezzo è già in uso.`);
         }
     }
 }
@@ -49,9 +56,9 @@ class Utente implements IUtente {
     nome: string;
     cognome: string;
     email: string;
-    metodoPagamento: 'carta' | 'bancomat' | 'app';
+    metodoPagamento: metodoPagamento;
 
-    constructor(nome: string, cognome: string, email: string, metodoPagamento: 'carta' | 'bancomat' | 'app') {
+    constructor(nome: string, cognome: string, email: string, metodoPagamento: metodoPagamento) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -66,15 +73,15 @@ class Utente implements IUtente {
 // Implementazione della classe Citta che segue l'interfaccia ICitta
 class Citta implements ICitta {
     nome: string;
-    mezziDisponibili: IMezzo[];
+    mezziPresenti: IMezzo[];
 
     constructor(nome: string) {
         this.nome = nome;
-        this.mezziDisponibili = [];
+        this.mezziPresenti = [];
     }
 
     aggiungiMezzo(mezzo: IMezzo): void {
-        this.mezziDisponibili.push(mezzo);
+        this.mezziPresenti.push(mezzo);
         console.log(`Mezzo ${mezzo.tipo} con ID ${mezzo.id} aggiunto alla città ${this.nome}`);
     }
 }
@@ -99,6 +106,7 @@ const mezzo9 = new Mezzo('monopattino', 'M4');
 const citta1 = new Citta('Roma');
 const citta2 = new Citta('Milano');
 
+// Test assegnazione di un mezzo ad una citta
 citta1.aggiungiMezzo(mezzo1);
 citta1.aggiungiMezzo(mezzo2);
 citta1.aggiungiMezzo(mezzo3);
@@ -109,10 +117,14 @@ citta2.aggiungiMezzo(mezzo7);
 citta2.aggiungiMezzo(mezzo8);
 citta2.aggiungiMezzo(mezzo9);
 
+// Test prenotazione di un mezzo da parte di un utente
 utente1.prenotaMezzo(mezzo1);
 utente2.prenotaMezzo(mezzo2);
 utente3.prenotaMezzo(mezzo7);
 utente4.prenotaMezzo(mezzo9);
+// Test errore 'mezzo non disponibile'
+utente5.prenotaMezzo(mezzo2);
 
-console.log(citta1.mezziDisponibili);
-console.log(citta2.mezziDisponibili);
+// Test mezzi presenti per citta
+console.log(citta1.mezziPresenti);
+console.log(citta2.mezziPresenti);
